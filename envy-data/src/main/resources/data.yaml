@@ -1,0 +1,10 @@
+data:
+  property-1:
+    dev: develop1
+    beta: test1
+    prod: production1
+  property-2:
+    dev: develop2
+    beta: test2
+    prod: production2
+

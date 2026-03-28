@@ -19,6 +19,8 @@
 
     <lombok.version>1.18.44</lombok.version>
     <snakeyaml.version>2.6</snakeyaml.version>
+    <junit-jupiter.version>6.0.3</junit-jupiter.version>
+    <jspecify.version>1.0.0</jspecify.version>
 
     <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
@@ -40,8 +42,22 @@
         <artifactId>snakeyaml</artifactId>
         <version>${snakeyaml.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.jspecify</groupId>
+        <artifactId>jspecify</artifactId>
+        <version>${jspecify.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit-jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>

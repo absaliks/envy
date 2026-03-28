@@ -1,4 +1,7 @@
-HELP.md
+# config dir is supposed to contain environment/properties configuration. Ignoring all except .gitkeep
+/config/*
+!/config/.gitkeep
+
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

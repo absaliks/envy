@@ -12,16 +12,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
+      <groupId>org.jetbrains.kotlinx</groupId>
+      <artifactId>kotlinx-serialization-json</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jspecify</groupId>
-      <artifactId>jspecify</artifactId>
+      <groupId>com.charleskorn.kaml</groupId>
+      <artifactId>kaml-jvm</artifactId>
     </dependency>
   </dependencies>
 
@@ -38,13 +34,7 @@
               <goal>java</goal>
             </goals>
             <configuration>
-              <mainClass>absaliks.envy.data.YamlToPropertiesConverter</mainClass>
-              <systemProperties>
-                <systemProperty>
-                  <key>outputDir</key>
-                  <value>${project.build.outputDirectory}</value>
-                </systemProperty>
-              </systemProperties>
+              <mainClass>absaliks.envy.data.MainKt</mainClass>
             </configuration>
           </execution>
         </executions>

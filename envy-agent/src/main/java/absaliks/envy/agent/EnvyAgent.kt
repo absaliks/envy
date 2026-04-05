@@ -1,14 +1,14 @@
 package absaliks.envy.agent
 
 import java.lang.instrument.Instrumentation
-import java.util.Objects
-import java.util.Properties
+import java.util.*
 
 object EnvyAgent {
 
+  @JvmStatic
   fun premain(agentArgs: String?, inst: Instrumentation?) {
+    val env = getEnv(agentArgs)
     System.getProperties().forEach { (k: Any?, v: Any?) ->
-      val env = agentArgs ?: throw IllegalArgumentException("Missing required environment argument")
 
       val key = Objects.toString(k)
       if (key.startsWith($$"${envy.") && key.endsWith("}")) {
@@ -17,10 +17,18 @@ object EnvyAgent {
     }
   }
 
-  private fun loadProperties(env: String): Properties {
-    val resourcePath = "/envs/$env.properties"
-    val stream = EnvyAgent::class.java.getResourceAsStream(resourcePath)
-      ?: throw IllegalArgumentException("No properties file found for environment '$env': $resourcePath")
-    return stream.use { Properties().apply { load(it) } }
+  private fun getEnv(agentArgs: String?): String {
+    if (agentArgs != null) return agentArgs
+
+    val availableEnvs = Utils.envsList()
+
+    val envList = availableEnvs.joinToString(", ", prefix = "[", postfix = "]")
+    throw IllegalArgumentException(
+      """
+      Missing environment argument.
+        Available envs: $envList.
+        How to apply: -javaagent:envy-agent.jar=prod-eu-west
+      """.trimIndent()
+    )
   }
 }

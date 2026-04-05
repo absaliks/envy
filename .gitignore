@@ -1,6 +1,5 @@
-# config dir is supposed to contain environment/properties configuration. Ignoring all except .gitkeep
-/config/*
-!/config/.gitkeep
+# config.yaml is supposed to contain environments/properties configuration
+config.yaml
 
 target/
 .mvn/wrapper/maven-wrapper.jar

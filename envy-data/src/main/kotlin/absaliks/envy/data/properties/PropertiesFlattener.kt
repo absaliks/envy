@@ -1,17 +1,14 @@
 package absaliks.envy.data.properties
 
 import absaliks.envy.data.env.Env
-import absaliks.envy.env.Envs
+import absaliks.envy.data.env.EnvsIndex
 import com.charleskorn.kaml.*
 
-fun flattenProperties(data: YamlNode, env: Env, envs: Envs): Map<String, String> =
-  Flattener(data, env, envs).flatten()
-
 // helper class to avoid passing too many params
-private class Flattener(
+class PropertiesFlattener(
   private val data: YamlNode,
   private val env: Env,
-  private val envs: Envs
+  private val envsIndex: EnvsIndex
 ) {
 
   private val result = mutableMapOf<String, String>()
@@ -32,14 +29,14 @@ private class Flattener(
   }
 
   private fun flatten(path: String, yamlMap: YamlMap) {
-    val containsEnvironmentAwareValues = yamlMap.entries.keys.any { envs.contains(it.content) }
+    val containsEnvironmentAwareValues = yamlMap.entries.keys.any { envsIndex.contains(it.content) }
     if (containsEnvironmentAwareValues) {
       env.resolutionPath.firstNotNullOfOrNull { yamlMap[it] }
         ?.let { value -> flatten(path, value) }
     }
 
     yamlMap.entries.forEach { (key, value) ->
-      if (!envs.contains(key.content)) {
+      if (!envsIndex.contains(key.content)) {
         val newPath = if (path.isEmpty()) key.content else path + "." + key.content
         flatten(newPath, value)
       }

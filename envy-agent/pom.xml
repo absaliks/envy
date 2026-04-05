@@ -55,7 +55,7 @@
                   <artifactId>envy-data</artifactId>
                   <version>${project.version}</version>
                   <includes>*.properties</includes>
-                  <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                  <outputDirectory>${project.build.outputDirectory}/envs</outputDirectory>
                 </artifactItem>
               </artifactItems>
             </configuration>

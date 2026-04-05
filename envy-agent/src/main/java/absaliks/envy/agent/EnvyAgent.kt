@@ -6,13 +6,6 @@ import java.util.Properties
 
 object EnvyAgent {
 
-  fun loadProperties(env: String): Properties {
-    val resourcePath = "/envs/$env.properties"
-    val stream = EnvyAgent::class.java.getResourceAsStream(resourcePath)
-      ?: throw IllegalArgumentException("No properties file found for environment '$env': $resourcePath")
-    return stream.use { Properties().apply { load(it) } }
-  }
-
   fun premain(agentArgs: String?, inst: Instrumentation?) {
     System.getProperties().forEach { (k: Any?, v: Any?) ->
       val env = agentArgs ?: throw IllegalArgumentException("Missing required environment argument")
@@ -22,5 +15,12 @@ object EnvyAgent {
         println("$k=$v")
       }
     }
+  }
+
+  private fun loadProperties(env: String): Properties {
+    val resourcePath = "/envs/$env.properties"
+    val stream = EnvyAgent::class.java.getResourceAsStream(resourcePath)
+      ?: throw IllegalArgumentException("No properties file found for environment '$env': $resourcePath")
+    return stream.use { Properties().apply { load(it) } }
   }
 }

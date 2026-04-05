@@ -1,15 +1,10 @@
-package absaliks.envy.env
+package absaliks.envy.data.env
 
-import absaliks.envy.data.env.Env
-import com.charleskorn.kaml.Yaml
-import kotlinx.serialization.decodeFromString
-
-class Envs {
+class EnvsIndex {
 
   private val index: Map<String, Env>
 
-  constructor(text: String) {
-    val envs = Yaml.default.decodeFromString<List<Env>>(text)
+  constructor(envs: List<Env>) {
     val index = indexEnvs(mutableMapOf(), envs)
     validateResolutionPaths(index)
     this.index = index

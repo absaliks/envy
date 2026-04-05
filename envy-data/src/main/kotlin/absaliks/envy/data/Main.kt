@@ -1,23 +1,22 @@
 package absaliks.envy.data
 
-import absaliks.envy.env.Envs
+import absaliks.envy.data.env.EnvsIndex
+import absaliks.envy.data.properties.PropertiesFlattener
 import absaliks.envy.data.properties.PropertiesWriter
-import absaliks.envy.data.properties.flattenProperties
 import absaliks.envy.data.util.FileUtil
 import com.charleskorn.kaml.Yaml
-import com.charleskorn.kaml.YamlNode
+import kotlinx.serialization.decodeFromString
 
 fun main() {
   val start = System.currentTimeMillis()
-  val envsText = FileUtil.readFile("config/envs.yaml")
-  val envs = Envs(envsText)
+  val configText = FileUtil.readFile("config.yaml")
+  val config = Yaml.default.decodeFromString<Config>(configText)
 
-  val dataText = FileUtil.readFile("config/data.yaml")
-  val data: YamlNode = Yaml.default.parseToYamlNode(dataText)
+  val envsIndex = EnvsIndex(config.envs)
 
-  envs.values()
+  envsIndex.values()
     .filter { it.isLeaf() }
-    .associateWith { env -> flattenProperties(data, env, envs) }
+    .associateWith { env -> PropertiesFlattener(config.data, env, envsIndex).flatten() }
     .forEach { (env, properties) ->
       PropertiesWriter.write(env.name, properties)
     }

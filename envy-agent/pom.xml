@@ -69,8 +69,8 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Main-Class>absaliks.envy.agent.MainKt</Main-Class>
-              <Premain-Class>absaliks.envy.agent.EnvyAgent</Premain-Class>
+              <Main-Class>absaliks.envy.agent.Main</Main-Class>
+              <Premain-Class>absaliks.envy.agent.Agent</Premain-Class>
             </manifestEntries>
           </archive>
         </configuration>

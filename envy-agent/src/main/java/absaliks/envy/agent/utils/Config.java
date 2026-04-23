@@ -8,24 +8,17 @@ import java.util.stream.Stream;
 
 import absaliks.envy.agent.config.Envs;
 
-public record Args(String env, String prefix, boolean optional, boolean verbose) {
+public record Config(String env, String namespace, boolean debug) {
 
-  private static final String DEFAULT_PREFIX = "e";
-
-  public static Args parse(String str) {
+  public static Config parse(String str) {
     var args = str == null ? new String[0] : str.split("[;,]+");
     Map<String, String> optionalArgs =
         args.length > 1 ? parseMap(Arrays.copyOfRange(args, 1, args.length)) : Map.of();
 
     var env = getEnv(args);
-    var prefix = getParameter(optionalArgs, "p", "prefix").orElse(DEFAULT_PREFIX);
-    var optional = getFlag(optionalArgs, "o", "optional");
-    var verbose = getFlag(optionalArgs, "d", "debug", "v", "verbose");
-    return new Args(env, prefix, optional, verbose);
-  }
-
-  private static Optional<String> getParameter(Map<String, String> map, String... aliases) {
-    return Stream.of(aliases).filter(map::containsKey).map(map::get).findFirst();
+    var namespace = getParameter(optionalArgs, "ns", "namespace").orElse(null);
+    var debug = getFlag(optionalArgs, "v", "verbose");
+    return new Config(env, namespace, debug);
   }
 
   private static boolean getFlag(Map<String, String> map, String... aliases) {
@@ -40,8 +33,12 @@ public record Args(String env, String prefix, boolean optional, boolean verbose)
     return false;
   }
 
+  private static Optional<String> getParameter(Map<String, String> map, String... aliases) {
+    return Stream.of(aliases).filter(map::containsKey).map(map::get).findFirst();
+  }
+
   private static String getEnv(String[] args) {
-    if (args.length > 1) {
+    if (args.length > 0) {
       var env = args[0];
       if (!Envs.exists(env)) {
         throw new IllegalArgumentException(

@@ -1,6 +1,6 @@
 package absaliks.envy.agent;
 
-import absaliks.envy.agent.utils.Core;
+import absaliks.envy.agent.utils.Utils;
 import absaliks.envy.agent.config.Envs;
 import absaliks.envy.agent.config.Props;
 import java.util.Collection;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class Main {
 
   static void main(String[] args) {
-    var env = Core.get(args, 0);
+    var env = Utils.get(args, 0);
     var envs = Envs.getAll();
     var propertiesSet = env != null ? Props.keySet(env) : Props.keySet(envs);
     System.out.printf(

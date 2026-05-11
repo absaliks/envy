@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import absaliks.envy.agent.services.SystemPropertiesProcessor;
-import absaliks.envy.agent.services.resolvers.ExpressionResolver;
+import absaliks.envy.agent.services.resolvers.ExpressionsResolver;
 import absaliks.envy.agent.services.ExpressionResolverService;
 import absaliks.envy.agent.services.resolvers.MapEntryResolver;
 
@@ -20,7 +20,7 @@ class SystemPropertiesProcessorTest {
           "password", "pwd123456",
           "orders.base-url", "http://orders:8080");
 
-  private final List<ExpressionResolver> resolvers =
+  private final List<ExpressionsResolver> resolvers =
       List.of(new MapEntryResolver(ENVY_PROPERTIES));
 
   private final ExpressionResolverService expressionResolverService =

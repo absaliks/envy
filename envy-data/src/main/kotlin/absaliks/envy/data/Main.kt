@@ -16,7 +16,7 @@ fun main() {
 
   envsIndex.values()
     .filter { it.isLeaf() }
-    .associateWith { env -> PropertiesFlattener(config.data, env, envsIndex).flatten() }
+    .associateWith { env -> PropertiesFlattener(config, env, envsIndex).flatten() }
     .forEach { (env, properties) ->
       PropertiesWriter.write(env.name, properties)
     }

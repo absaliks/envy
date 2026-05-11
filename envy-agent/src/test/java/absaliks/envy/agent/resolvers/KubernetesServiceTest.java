@@ -1,18 +1,16 @@
 package absaliks.envy.agent.resolvers;
 
+import static absaliks.envy.agent.test.TestUtils.setOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import absaliks.envy.agent.services.KubernetesService;
 import absaliks.envy.agent.utils.Shell;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Test;
 
 class KubernetesServiceTest {
@@ -26,7 +24,7 @@ class KubernetesServiceTest {
   void getSecretEntries_oneSecret() {
     var expectedCommand =
         """
-        kubectl get secret db-secrets -n prd1741 -o go-template='{{$name := .metadata.name}}{{range $k,$v := .data}}#&{{$name}}.{{$k}}={{$v}}{{"\\n"}}{{end}}'""";
+        kubectl get secret db-secrets -n k8s-ns1 -o go-template='{{$name := .metadata.name}}{{range $k,$v := .data}}#&{{$name}}.{{$k}}={{$v}}{{"\\n"}}{{end}}'""";
     when(shell.run(expectedCommand))
         .thenReturn(
             new Shell.Result(
@@ -36,7 +34,7 @@ class KubernetesServiceTest {
                 #&db-secrets.password=cHdkMTIzNDU2
                 """,
                 EXIT_CODE_SUCCESS));
-    var entries = kubernetesService.getSecretEntries(List.of("db-secrets"));
+    var entries = kubernetesService.getSecretEntries("k8s-ns1", setOf("db-secrets"));
 
     assertThat(entries)
         .isEqualTo(
@@ -53,7 +51,7 @@ class KubernetesServiceTest {
   void getSecretEntries_twoSecrets() {
     var expectedCommand =
         """
-        kubectl get secret db-secrets api-secrets -n prd1741 -o go-template='{{range .items}}{{$name := .metadata.name}}{{range $k,$v := .data}}#&{{$name}}.{{$k}}={{$v}}{{"\\n"}}{{end}}{{end}}'""";
+        kubectl get secret db-secrets api-secrets -n k8s-ns2 -o go-template='{{range .items}}{{$name := .metadata.name}}{{range $k,$v := .data}}#&{{$name}}.{{$k}}={{$v}}{{"\\n"}}{{end}}{{end}}'""";
     when(shell.run(expectedCommand))
         .thenReturn(
             new Shell.Result(
@@ -66,7 +64,7 @@ class KubernetesServiceTest {
                 """,
                 EXIT_CODE_SUCCESS));
 
-    var entries = kubernetesService.getSecretEntries(List.of("db-secrets", "api-secrets"));
+    var entries = kubernetesService.getSecretEntries("k8s-ns2", setOf("db-secrets", "api-secrets"));
 
     assertThat(entries)
         .isEqualTo(
@@ -86,7 +84,7 @@ class KubernetesServiceTest {
   void getSecretEntries_twoSecrets_oneNotFound() {
     var expectedCommand =
         """
-        kubectl get secret db-secrets api-secrets -n prd1741 -o go-template='{{range .items}}{{$name := .metadata.name}}{{range $k,$v := .data}}#&{{$name}}.{{$k}}={{$v}}{{"\\n"}}{{end}}{{end}}'""";
+        kubectl get secret db-secrets api-secrets -n k8s-ns3 -o go-template='{{range .items}}{{$name := .metadata.name}}{{range $k,$v := .data}}#&{{$name}}.{{$k}}={{$v}}{{"\\n"}}{{end}}{{end}}'""";
     when(shell.run(expectedCommand))
         .thenReturn(
             new Shell.Result(
@@ -99,7 +97,7 @@ class KubernetesServiceTest {
                 """,
                 EXIT_CODE_SUCCESS));
 
-    var entries = kubernetesService.getSecretEntries(List.of("db-secrets", "api-secrets"));
+    var entries = kubernetesService.getSecretEntries("k8s-ns3", setOf("db-secrets", "api-secrets"));
 
     assertThat(entries)
         .isEqualTo(

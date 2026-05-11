@@ -21,7 +21,7 @@ class UtilsTest {
             List.of("git", "reset", "--soft", "origin/XYZ-12345-hello")),
         Arguments.of(
             "kubectl get secret secrets1 -o jsonpath='{ .data }'",
-            List.of("kubectl", "get", "secret", "secrets1", "-o", "jsonpath='{ .data }'")));
+            List.of("kubectl", "get", "secret", "secrets1", "-o", "jsonpath={ .data }")));
   }
 
   @ParameterizedTest

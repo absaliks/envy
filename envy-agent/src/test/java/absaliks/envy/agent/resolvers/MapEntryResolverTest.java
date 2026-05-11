@@ -2,11 +2,13 @@ package absaliks.envy.agent.resolvers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import absaliks.envy.agent.services.Resolvable;
 import absaliks.envy.agent.services.resolvers.MapEntryResolver;
 
 class MapEntryResolverTest {
@@ -29,8 +31,11 @@ class MapEntryResolverTest {
           server.port,
           """)
   void resolve(String expression, String expectedValue) {
-    var resolved = resolver.resolve(expression);
+    var resolvableExpression = new Resolvable.Expression("$" + expression, expression);
 
-    assertThat(resolved).isEqualTo(expectedValue);
+    resolver.resolve(List.of(resolvableExpression));
+
+    var value = resolvableExpression.value().isInitialized() ? resolvableExpression.value().get() : null;
+    assertThat(value).isEqualTo(expectedValue);
   }
 }

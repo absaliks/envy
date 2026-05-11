@@ -3,59 +3,56 @@ package absaliks.envy.agent.services;
 import absaliks.envy.agent.utils.Utils;
 import absaliks.envy.agent.utils.Log;
 import absaliks.envy.agent.utils.Shell;
-import java.util.List;
+
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class KubernetesService {
 
-  private static final String NAMESPACE = "prd1741";
-
   private final Shell shell;
-  private String context;
 
   public KubernetesService(Shell shell) {
     this.shell = shell;
   }
 
   public void setContext(String name) {
-    if (!name.equals(context)) {
-      var result = shell.run("kubectx $name");
-      if (result.isSuccess()) {
-        context = name;
-      } else {
-        throw new RuntimeException("Couldn't set k8s context to '$name': ${result.output}");
-      }
+    var result = shell.run("kubectx " + name);
+    if (!result.isSuccess()) {
+      throw new RuntimeException("Couldn't set k8s context to '%s': %s".formatted(name, result));
     }
   }
 
-  /// Go template formating secret entries in <code>#&{secret-name}.{field}={value}\n</code> format. Weird #& prefix is
-  /// to be able to distinguish secret entries from error messages more reliably, when response is partially successful.
+  /**
+   * Go template formating secret entries in <code>#&{secret-name}.{field}={value}\n</code> format.
+   * Weird #& prefix is to be able to distinguish secret entries from error messages more reliably,
+   * when response is partially successful.
+   */
   private static final String SECRET_ENTRIES_TEMPLATE =
       "{{$name := .metadata.name}}{{range $k,$v := .data}}#&{{$name}}.{{$k}}={{$v}}{{\"\\n\"}}{{end}}";
 
   /// Gets list of entries for the given secrets. Map key format: <code>{secret-name}.{field}</code>
-  public Map<String, String> getSecretEntries(List<String> secrets) {
-    var secretsStr = String.join(" ", secrets);
+  public Map<String, String> getSecretEntries(String namespace, Set<String> secretNames) {
+    var secretNamesStr = String.join(" ", secretNames);
     var outputTemplate =
-        secrets.size() == 1
+        secretNames.size() == 1
             ? SECRET_ENTRIES_TEMPLATE
             : "{{range .items}}" + SECRET_ENTRIES_TEMPLATE + "{{end}}";
     var command =
         "kubectl get secret %s -n %s -o go-template='%s'"
-            .formatted(secretsStr, NAMESPACE, outputTemplate);
+            .formatted(secretNamesStr, namespace, outputTemplate);
     var result = shell.run(command);
     if (result.isSuccess()) {
       return parseKeyValuePairs(result.output());
     } else {
-      // When requesting multiple secrets at once and result is partially successful, kubectl returns entries
-      // for existing secrets along with errors for failed secrets.
+      // When requesting multiple secrets at once and the result is partially successful, kubectl returns entries
+      // for existing secrets along with errors for failed secrets. We don't want to print secret values.
       var errors = Utils.lines(result.output())
           .filter(line -> !isSecretEntry(line))
           .collect(Collectors.joining("\n"));
-      throw new RuntimeException("Couldn't get entries for k8s secrets: " + secrets + "\n" + errors);
+      throw new RuntimeException("Couldn't get entries for k8s secrets: " + secretNames + "\n" + errors);
     }
   }
 

@@ -1,12 +1,15 @@
 package absaliks.envy.data.properties
 
+import absaliks.envy.data.Config
 import absaliks.envy.data.env.Env
 import absaliks.envy.data.env.EnvsIndex
 import com.charleskorn.kaml.*
 
-// helper class to avoid passing too many params
+/**
+ * Converts YAML properties into flat env-specific key/value pairs
+ */
 class PropertiesFlattener(
-  private val data: YamlNode,
+  private val config: Config,
   private val env: Env,
   private val envsIndex: EnvsIndex
 ) {
@@ -14,8 +17,16 @@ class PropertiesFlattener(
   private val result = mutableMapOf<String, String>()
 
   fun flatten(): Map<String, String> {
-    flatten("", data)
+    flatten("", config.data)
+    addProperty("__env.k8s-context", env.k8sContext)
+    addProperty("__env.k8s-namespace", config.defaults?.k8sNamespace)
     return result
+  }
+
+  private fun addProperty(key: String, value: String?) {
+    if (value != null) {
+      result[key] = value
+    }
   }
 
   private fun flatten(path: String, node: YamlNode) {

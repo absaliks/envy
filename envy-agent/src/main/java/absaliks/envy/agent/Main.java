@@ -1,8 +1,8 @@
 package absaliks.envy.agent;
 
-import absaliks.envy.agent.utils.Utils;
 import absaliks.envy.agent.config.Envs;
 import absaliks.envy.agent.config.Props;
+import absaliks.envy.agent.utils.Utils;
 import java.util.Collection;
 import java.util.stream.Collectors;
 

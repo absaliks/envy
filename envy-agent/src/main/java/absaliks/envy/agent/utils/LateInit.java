@@ -2,12 +2,13 @@ package absaliks.envy.agent.utils;
 
 import lombok.Getter;
 
-/** Reference holder that can be initialized only once and cannot be accessed without initialization. */
+/**
+ * Reference holder that can be initialized only once and cannot be accessed without initialization.
+ */
 public class LateInit<T> {
 
   private volatile T value;
-  @Getter
-  private volatile boolean isInitialized;
+  @Getter private volatile boolean isInitialized;
 
   public synchronized void set(T value) {
     if (isInitialized) {

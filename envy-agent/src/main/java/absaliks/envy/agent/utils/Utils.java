@@ -19,11 +19,12 @@ public final class Utils {
 
   public static Map<String, String> toMap(Properties props) {
     var result = new HashMap<String, String>();
-    props.forEach((k, v) -> {
-      String key = k.toString();
-      String value = v.toString();
-      result.put(key, value);
-    });
+    props.forEach(
+        (k, v) -> {
+          String key = k.toString();
+          String value = v.toString();
+          result.put(key, value);
+        });
     return result;
   }
 

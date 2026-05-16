@@ -55,7 +55,7 @@ email-service.api-key=${k8s-secret:email-service-secrets:api-key}
 
 #### Attach Java agent
 
-In the run configuration via VM options: `-javaagent:/.../envy-agent.jar`
+In the run configuration via VM options: `-javaagent:/.../envy-agent.jar={env}`
 
 #### Setup property mappings service ~ envy
 

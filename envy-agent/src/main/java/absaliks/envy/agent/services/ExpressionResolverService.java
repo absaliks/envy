@@ -10,9 +10,7 @@ public class ExpressionResolverService {
   private final List<ExpressionsResolver> resolvers;
 
   public void resolve(List<Resolvable> resolvables) {
-    var expressions = resolvables.stream()
-        .flatMap(r -> r.expressions().stream())
-        .toList();
+    var expressions = resolvables.stream().flatMap(r -> r.expressions().stream()).toList();
     for (var resolver : resolvers) {
       resolver.resolve(expressions);
     }

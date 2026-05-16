@@ -1,12 +1,11 @@
 package absaliks.envy.agent.utils;
 
+import absaliks.envy.agent.config.Envs;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import absaliks.envy.agent.config.Envs;
 
 public record Config(String env, String namespace, boolean debug) {
 
@@ -67,7 +66,8 @@ public record Config(String env, String namespace, boolean debug) {
           throw new IllegalArgumentException("'=' cannot be the first character of an argument");
         default:
           var key = arg.substring(0, equalsIndex);
-          var value = arg.substring(equalsIndex + 1); // value is empty string, if equals is the last char
+          var value =
+              arg.substring(equalsIndex + 1); // value is empty string, if equals is the last char
           result.put(key, value);
       }
     }

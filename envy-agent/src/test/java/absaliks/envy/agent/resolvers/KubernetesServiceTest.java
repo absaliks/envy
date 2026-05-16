@@ -75,9 +75,10 @@ class KubernetesServiceTest {
                 "john.doe",
                 "db-secrets.password",
                 "pwd123456",
-                "api-secrets._raw", "{\"data\":{\"token\":\"abracadabra\"},\"metadata\":{\"created_time\":\"2026-03-07T12:45:34.121Z\",\"version\":2}}",
-                "api-secrets.token", "abracadabra"
-                ));
+                "api-secrets._raw",
+                "{\"data\":{\"token\":\"abracadabra\"},\"metadata\":{\"created_time\":\"2026-03-07T12:45:34.121Z\",\"version\":2}}",
+                "api-secrets.token",
+                "abracadabra"));
   }
 
   @Test
@@ -108,9 +109,10 @@ class KubernetesServiceTest {
                 "john.doe",
                 "db-secrets.password",
                 "pwd123456",
-                "api-secrets._raw", "{\"data\":{\"token\":\"abracadabra\"},\"metadata\":{\"created_time\":\"2026-03-07T12:45:34.121Z\",\"version\":2}}",
-                "api-secrets.token", "abracadabra"
-                ));
+                "api-secrets._raw",
+                "{\"data\":{\"token\":\"abracadabra\"},\"metadata\":{\"created_time\":\"2026-03-07T12:45:34.121Z\",\"version\":2}}",
+                "api-secrets.token",
+                "abracadabra"));
   }
 
   @Test

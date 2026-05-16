@@ -9,9 +9,7 @@ public class Shell {
     Log.debug("<shell> %s", command);
     Process process = null;
     try {
-      process = new ProcessBuilder(Utils.splitCommand(command))
-        .redirectErrorStream(true)
-        .start();
+      process = new ProcessBuilder(Utils.splitCommand(command)).redirectErrorStream(true).start();
 
       var output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
       var exitCode = process.waitFor();
@@ -31,4 +29,3 @@ public class Shell {
     }
   }
 }
-

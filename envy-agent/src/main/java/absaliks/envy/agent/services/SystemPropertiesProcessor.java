@@ -1,5 +1,6 @@
 package absaliks.envy.agent.services;
 
+import absaliks.envy.agent.utils.Log;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,11 @@ public class SystemPropertiesProcessor {
                 : value.replace(expression.placeholder(), expValue);
       }
     }
-    return value != resolvable.rawValue() ? new SimpleEntry<>(resolvable.key(), value) : null;
+    if (value != resolvable.rawValue()) {
+      Log.info("Resolved " + resolvable.key() + "=" + value);
+      return new SimpleEntry<>(resolvable.key(), value);
+    }
+    return null;
   }
 
   private static Resolvable getResolvable(String key, String value) {

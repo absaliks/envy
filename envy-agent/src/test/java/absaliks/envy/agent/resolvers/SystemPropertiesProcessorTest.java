@@ -2,15 +2,13 @@ package absaliks.envy.agent.resolvers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-import java.util.Map;
-
-import org.junit.jupiter.api.Test;
-
+import absaliks.envy.agent.services.ExpressionResolverService;
 import absaliks.envy.agent.services.SystemPropertiesProcessor;
 import absaliks.envy.agent.services.resolvers.ExpressionsResolver;
-import absaliks.envy.agent.services.ExpressionResolverService;
 import absaliks.envy.agent.services.resolvers.MapEntryResolver;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
 
 class SystemPropertiesProcessorTest {
 

@@ -18,10 +18,7 @@ public class KubernetesSecretsResolver implements ExpressionsResolver {
   private final Map<String, String> envProperties;
 
   public void resolve(List<Resolvable.Expression> expressions) {
-    var secrets = expressions.stream()
-        .map(K8sSecret::evaluate)
-        .filter(Objects::nonNull)
-        .toList();
+    var secrets = expressions.stream().map(K8sSecret::evaluate).filter(Objects::nonNull).toList();
     if (secrets.isEmpty()) {
       return;
     }

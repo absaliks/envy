@@ -1,9 +1,8 @@
 package absaliks.envy.agent.services;
 
-import absaliks.envy.agent.utils.Utils;
 import absaliks.envy.agent.utils.Log;
 import absaliks.envy.agent.utils.Shell;
-
+import absaliks.envy.agent.utils.Utils;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -47,12 +46,16 @@ public class KubernetesService {
     if (result.isSuccess()) {
       return parseKeyValuePairs(result.output());
     } else {
-      // When requesting multiple secrets at once and the result is partially successful, kubectl returns entries
-      // for existing secrets along with errors for failed secrets. We don't want to print secret values.
-      var errors = Utils.lines(result.output())
-          .filter(line -> !isSecretEntry(line))
-          .collect(Collectors.joining("\n"));
-      throw new RuntimeException("Couldn't get entries for k8s secrets: " + secretNames + "\n" + errors);
+      // When requesting multiple secrets at once and the result is partially successful, kubectl
+      // returns entries
+      // for existing secrets along with errors for failed secrets. We don't want to print secret
+      // values.
+      var errors =
+          Utils.lines(result.output())
+              .filter(line -> !isSecretEntry(line))
+              .collect(Collectors.joining("\n"));
+      throw new RuntimeException(
+          "Couldn't get entries for k8s secrets: " + secretNames + "\n" + errors);
     }
   }
 
@@ -70,8 +73,13 @@ public class KubernetesService {
               var encodedValue = line.substring(eqIndex + 1);
               return Utils.tryBase64Decode(encodedValue)
                   .map(value -> Map.entry(key, value))
-                  .orElseThrow(() ->
-                      new RuntimeException("Unable to base64-decode value '" + encodedValue + "' for key " + key));
+                  .orElseThrow(
+                      () ->
+                          new RuntimeException(
+                              "Unable to base64-decode value '"
+                                  + encodedValue
+                                  + "' for key "
+                                  + key));
             })
         .filter(Objects::nonNull)
         .collect(Collectors.toMap(Entry::getKey, Entry::getValue));

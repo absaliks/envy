@@ -1,13 +1,12 @@
 package absaliks.envy.agent.config;
 
+import absaliks.envy.agent.utils.Utils;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import absaliks.envy.agent.utils.Utils;
 
 public final class Props {
 

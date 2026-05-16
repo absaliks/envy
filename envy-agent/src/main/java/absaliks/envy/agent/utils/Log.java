@@ -1,7 +1,6 @@
 package absaliks.envy.agent.utils;
 
 import static absaliks.envy.agent.Agent.config;
-import static absaliks.envy.agent.Agent.premain;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

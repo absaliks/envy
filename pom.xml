@@ -31,6 +31,7 @@
     <maven-dependency-plugin.version>3.10.0</maven-dependency-plugin.version>
     <spotless-maven-plugin.version>3.4.0</spotless-maven-plugin.version>
     <maven-failsafe-plugin.version>3.5.5</maven-failsafe-plugin.version>
+    <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -135,6 +136,20 @@
               <goal>check</goal>
             </goals>
             <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven-source-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

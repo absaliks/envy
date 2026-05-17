@@ -12,7 +12,6 @@ import absaliks.envy.agent.utils.Config;
 import absaliks.envy.agent.utils.Log;
 import absaliks.envy.agent.utils.Shell;
 import java.lang.instrument.Instrumentation;
-import java.util.List;
 
 public class Agent {
 
@@ -25,6 +24,7 @@ public class Agent {
   }
 
   public static void premain(String argsString, Instrumentation inst) {
+    var start = System.currentTimeMillis();
     System.out.println(
         """
           █▀▀ █▀█ █ █ █ █
@@ -38,12 +38,12 @@ public class Agent {
     var envProperties = Props.forEnv(config.env());
     var resolver =
         new ExpressionResolverService(
-            List.of(
-                new KubernetesSecretsResolver(k8sService, envProperties),
-                new MapEntryResolver(envProperties)));
+            new MapEntryResolver(envProperties),
+            new KubernetesSecretsResolver(k8sService, envProperties));
 
     var systemProperties = toMap(System.getProperties());
     var changedProperties = SystemPropertiesProcessor.process(systemProperties, resolver);
     changedProperties.forEach(System::setProperty);
+    Log.info("Finished in " + (System.currentTimeMillis() - start) + "ms");
   }
 }

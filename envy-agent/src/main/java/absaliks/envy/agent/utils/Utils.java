@@ -73,4 +73,8 @@ public final class Utils {
     }
     return tokens;
   }
+
+  public static String mask(String str) {
+    return "*".repeat(str.length());
+  }
 }

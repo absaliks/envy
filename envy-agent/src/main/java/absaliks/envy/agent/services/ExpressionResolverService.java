@@ -1,18 +1,18 @@
 package absaliks.envy.agent.services;
 
-import absaliks.envy.agent.services.resolvers.ExpressionsResolver;
+import absaliks.envy.agent.services.resolvers.KubernetesSecretsResolver;
+import absaliks.envy.agent.services.resolvers.MapEntryResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ExpressionResolverService {
 
-  private final List<ExpressionsResolver> resolvers;
+  private final MapEntryResolver envyPropertiesResolver;
+  private final KubernetesSecretsResolver secretsResolver;
 
-  public void resolve(List<Resolvable> resolvables) {
-    var expressions = resolvables.stream().flatMap(r -> r.expressions().stream()).toList();
-    for (var resolver : resolvers) {
-      resolver.resolve(expressions);
-    }
+  public void resolve(List<Property> properties) {
+    envyPropertiesResolver.resolve(properties);
+    secretsResolver.resolve(properties);
   }
 }

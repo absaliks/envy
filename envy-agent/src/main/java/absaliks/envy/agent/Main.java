@@ -4,6 +4,7 @@ import absaliks.envy.agent.config.Envs;
 import absaliks.envy.agent.config.Props;
 import absaliks.envy.agent.utils.Utils;
 import java.util.Collection;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -11,7 +12,9 @@ public class Main {
   static void main(String[] args) {
     var env = Utils.get(args, 0);
     var envs = Envs.getAll();
-    var propertiesSet = env != null ? Props.keySet(env) : Props.keySet(envs);
+    var propertiesString = env != null
+        ? sortAndFormat(Props.forEnv(env))
+        : sortAndFormat(Props.keySet(envs));
     System.out.printf(
         """
         This is a java agent jar implementing "premain" method, \
@@ -24,10 +27,18 @@ public class Main {
         Available properties:
         %s
         """,
-        sortAndFormat(envs), sortAndFormat(propertiesSet));
+        sortAndFormat(envs), propertiesString);
   }
 
   private static String sortAndFormat(Collection<String> items) {
     return items.stream().sorted().collect(Collectors.joining("\n- ", "- ", ""));
+  }
+
+  private static String sortAndFormat(Map<String, String> items) {
+    var maxKeyLength = items.keySet().stream().mapToInt(String::length).max().orElse(0);
+    return items.entrySet().stream()
+        .sorted(Map.Entry.comparingByKey())
+        .map(entry -> "- " + Utils.rightPad(entry.getKey(), maxKeyLength) + " = " + entry.getValue() + "\n")
+        .collect(Collectors.joining());
   }
 }

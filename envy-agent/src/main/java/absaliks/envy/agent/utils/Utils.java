@@ -77,4 +77,9 @@ public final class Utils {
   public static String mask(String str) {
     return "*".repeat(str.length());
   }
+
+  /// rightPad("hey", 5) => "hey  "
+  public static String rightPad(String str, int length) {
+    return ("%-" + length + "s").formatted(str);
+  }
 }

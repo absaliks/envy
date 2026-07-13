@@ -36,7 +36,7 @@ email-service:
     prod-eu-west: https://email-service.prod-eu.com  # env-specific
     prod-eu-east: https://email-service.prod-eu.com
     dev: https://email-service.dev.com               # group of environments (value applied for dev-us & dev-eu)
-  api-key: ${k8s-secret:email-service-secrets:api-key}  # value can be extracted from k8s secrets
+  api-key: ${k8sSecret:email-service-secrets.api-key}  # value can be extracted from k8s secrets
 ```
 
 #### Build
@@ -48,7 +48,7 @@ files are env-specific; and packages the property files inside the Java agent JA
 my-email=john.doe@email.test
 redis-cache=http://localhost:6379
 email-service.base-url=https://email-service.dev.com
-email-service.api-key=${k8s-secret:email-service-secrets:api-key}
+email-service.api-key=${k8sSecret:email-service-secrets.api-key}
 ```
 
 ### Your service
